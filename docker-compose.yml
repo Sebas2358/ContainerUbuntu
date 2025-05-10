@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  ubuntu:
+    build: .
+    image: ubuntu:22.04
+    container_name: my_custom_ubuntu
+    volumes:
+      - mydata:/data
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+
+volumes:
+  mydata:
