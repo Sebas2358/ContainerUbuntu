@@ -47,7 +47,7 @@ This file contains generic content for testing purposes.
 Python telnet script demonstration.
 End of file.
 """
-        sock.sendall(content.encode('ascii'))
+        sock.sendall(content.encode('utf-8'))
         time.sleep(0.5)
         
         # Exit insert mode (press ESC)
@@ -67,9 +67,12 @@ End of file.
         
         # Read the output
         try:
-            output = sock.recv(4096).decode('ascii', errors='ignore')
-            print("\nOutput from server:")
-            print(output)
+            output = sock.recv(4096).decode('utf-8', errors='ignore')
+            if output:
+                print("\nOutput from server:")
+                print(output)
+            else:
+                print("\nNo output received from server (connection closed)")
         except socket.timeout:
             print("\nNo response received from server (timeout)")
         
@@ -93,7 +96,12 @@ End of file.
 if __name__ == "__main__":
     # Allow custom host and port via command line arguments
     host = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
-    port = int(sys.argv[2]) if len(sys.argv) > 2 else 5555
+    
+    try:
+        port = int(sys.argv[2]) if len(sys.argv) > 2 else 5555
+    except ValueError:
+        print(f"Error: Invalid port number '{sys.argv[2]}'. Port must be an integer.")
+        sys.exit(1)
     
     print("=" * 60)
     print("Telnet Script - Create File with Vi")
